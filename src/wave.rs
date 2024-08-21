@@ -1,7 +1,9 @@
-use std::sync::mpsc::{Sender, Receiver};
+use std::{
+    sync::mpsc::{Sender, Receiver},
+    f32::consts::{E, PI}
+    };
 use cpal::SampleFormat;
 use cpal::traits::{DeviceTrait, StreamTrait};
-use std::f32::consts::PI;
 use ringbuf::{
     traits::{Consumer, Producer, Split, Observer}, 
     HeapRb,
@@ -34,6 +36,7 @@ impl Wave {
         buffer_size: usize,
         wave_type: WaveType,
         duration: Option<f32>,
+        attack_duration: f32,
         ) -> Self {
 
         let mut wave = Self {
@@ -50,14 +53,18 @@ impl Wave {
             let phase_increment = 2.0 * PI * wave.frequency / wave.sample_rate as f32;
             let mut time = 0.0 as f32;
             let total_samples = wave.sample_rate as f32 * duration.unwrap_or(0.0);
+            let attack_samples = (sample_rate as  f32 * (attack_duration / 1000.0)) as f32;
             loop {
                 let block: Vec<f32> = (0..buffer_size)
                     .flat_map(|_| {
-
-                        let sample_amplitude = if let Some(_duration) = wave.duration {
+                        let sample_amplitude = if time * wave.sample_rate as f32 <= attack_samples {
+                           wave.amplitude * (time * wave.sample_rate as f32 / attack_samples).min(1.0) 
+                        } else if let Some(_duration) = wave.duration {
                             let remaining_samples = total_samples - (time * wave.sample_rate as f32);
                             if remaining_samples <= total_samples {
-                                wave.amplitude * (remaining_samples / total_samples)
+                                // Exponential Decay
+                                let decay_factor = (remaining_samples / total_samples).max(0.0);
+                                wave.amplitude * E.powf(-5.0 * (1.0 - decay_factor))
                             } else {
                                 wave.amplitude
                             }
@@ -165,8 +172,8 @@ impl Wave {
                 sample_format => panic!("Unsupported sample format '{sample_format}'")
             }.unwrap();
             stream.play().expect("Wave::play - Failed to play stream");
-            let duration: f32 = duration * 1000.0;
-            std::thread::sleep(std::time::Duration::from_millis(duration as u64));
+            let duration: u64 = ((duration + 1.0) * 1000.0) as u64;
+            std::thread::sleep(std::time::Duration::from_millis(duration));
         });
 
     }

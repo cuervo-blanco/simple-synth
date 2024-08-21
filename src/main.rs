@@ -16,23 +16,14 @@ use wave::{
 use cpal::{Device, SupportedStreamConfig};
 
 const C4: f32 = 261.63;
-#[allow(dead_code)]
 const D4: f32 = 293.66;
-#[allow(dead_code)]
 const E4: f32 = 329.63;
-#[allow(dead_code)]
 const F4: f32 = 349.23;
-#[allow(dead_code)]
 const G4: f32 = 392.0;
-#[allow(dead_code)]
 const A4: f32 = 440.0;
-#[allow(dead_code)]
 const B4: f32 = 493.88;
-#[allow(dead_code)]
 const C5: f32 = 523.25;
-#[allow(dead_code)]
 const D5: f32 = 587.33;
-#[allow(dead_code)]
 const E5: f32 = 659.25;
 
 fn switch_wave_type(wave_type: WaveType) -> WaveType {
@@ -60,7 +51,8 @@ fn main() -> Result<()> {
     let device: Arc<Mutex<Device>> = Arc::new(Mutex::new(output_device));
     let config: Arc<Mutex<SupportedStreamConfig>> = Arc::new(Mutex::new(output_config));
 
-    let duration: f32 = 3.0;
+    let duration: f32 = 2.0;
+    let attack: f32 = 100.0;
 
 
     execute!(stdout, Clear(ClearType::All))?;
@@ -85,7 +77,7 @@ fn main() -> Result<()> {
                     KeyCode::Char('a') => { 
                         // Sound
                         let (output_sine, input_playback) = channel();
-                        let wave = Wave::new(C4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
+                        let wave = Wave::new(C4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration), attack);
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
                         // Visual
                         stdout.execute(SetBackgroundColor(Color::Blue))?;
@@ -93,7 +85,7 @@ fn main() -> Result<()> {
                     },
                     KeyCode::Char('s') => {
                         let (output_sine, input_playback) = channel();
-                        let wave = Wave::new(D4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
+                        let wave = Wave::new(D4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration), attack);
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
                         // Visual
                         stdout.execute(SetBackgroundColor(Color::Green))?;
@@ -101,7 +93,7 @@ fn main() -> Result<()> {
                     },
                     KeyCode::Char('d') => {
                         let (output_sine, input_playback) = channel();
-                        let wave = Wave::new(E4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
+                        let wave = Wave::new(E4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration), attack);
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
                         // Visual
                         stdout.execute(SetBackgroundColor(Color::Red))?;
@@ -109,7 +101,7 @@ fn main() -> Result<()> {
                     }, 
                     KeyCode::Char('f') => {
                         let (output_sine, input_playback) = channel();
-                        let wave = Wave::new(F4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
+                        let wave = Wave::new(F4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration), attack);
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
                         // Visual
                         stdout.execute(SetBackgroundColor(Color::Yellow))?;
@@ -117,7 +109,7 @@ fn main() -> Result<()> {
                     },
                     KeyCode::Char('g') => {
                         let (output_sine, input_playback) = channel();
-                        let wave = Wave::new(G4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
+                        let wave = Wave::new(G4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration), attack);
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
                         // Visual
                         stdout.execute(SetBackgroundColor(Color::Magenta))?;
@@ -125,7 +117,7 @@ fn main() -> Result<()> {
                     }, 
                     KeyCode::Char('h') => {
                         let (output_sine, input_playback) = channel();
-                        let wave = Wave::new(A4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
+                        let wave = Wave::new(A4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration), attack);
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
                         // Visual
                         stdout.execute(SetBackgroundColor(Color::Cyan))?;
@@ -133,7 +125,7 @@ fn main() -> Result<()> {
                     },
                     KeyCode::Char('j') => {
                         let (output_sine, input_playback) = channel();
-                        let wave = Wave::new(B4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
+                        let wave = Wave::new(B4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration), attack);
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
                         // Visual
                         stdout.execute(SetBackgroundColor(Color::White))?;
@@ -141,7 +133,7 @@ fn main() -> Result<()> {
                     }, 
                     KeyCode::Char('k') => {
                         let (output_sine, input_playback) = channel();
-                        let wave = Wave::new(C5, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
+                        let wave = Wave::new(C5, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration), attack);
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
                         // Visual
                         stdout.execute(SetBackgroundColor(Color::DarkBlue))?;
@@ -149,7 +141,7 @@ fn main() -> Result<()> {
                     },
                     KeyCode::Char('l') => {
                         let (output_sine, input_playback) = channel();
-                        let wave = Wave::new(D5, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
+                        let wave = Wave::new(D5, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration), attack);
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
                         // Visual
                         stdout.execute(SetBackgroundColor(Color::DarkGreen))?;
@@ -157,7 +149,7 @@ fn main() -> Result<()> {
                     },
                     KeyCode::Char(';') => {
                         let (output_sine, input_playback) = channel();
-                        let wave = Wave::new(E5, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
+                        let wave = Wave::new(E5, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration), attack);
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
                         // Visual
                         stdout.execute(SetBackgroundColor(Color::DarkRed))?;
