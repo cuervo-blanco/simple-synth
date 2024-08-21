@@ -72,6 +72,8 @@ fn main() -> Result<()> {
     let config_clone = config.clone();
 
     loop {
+        let device_guard = device_clone.lock().unwrap();
+        let config_guard = config_clone.lock().unwrap();
         // Wait for an event
         if event::poll(std::time::Duration::from_millis(500))? {
             // Read the event
@@ -82,8 +84,6 @@ fn main() -> Result<()> {
                     },
                     KeyCode::Char('a') => { 
                         // Sound
-                        let device_guard = device_clone.lock().unwrap();
-                        let config_guard = config_clone.lock().unwrap();
                         let (output_sine, input_playback) = channel();
                         let wave = Wave::new(C4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
@@ -92,8 +92,6 @@ fn main() -> Result<()> {
                         stdout.execute(Print("Do4"))?;
                     },
                     KeyCode::Char('s') => {
-                        let device_guard = device_clone.lock().unwrap();
-                        let config_guard = config_clone.lock().unwrap();
                         let (output_sine, input_playback) = channel();
                         let wave = Wave::new(D4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
@@ -102,8 +100,6 @@ fn main() -> Result<()> {
                         stdout.execute(Print("Re4"))?;
                     },
                     KeyCode::Char('d') => {
-                        let device_guard = device_clone.lock().unwrap();
-                        let config_guard = config_clone.lock().unwrap();
                         let (output_sine, input_playback) = channel();
                         let wave = Wave::new(E4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
@@ -112,8 +108,6 @@ fn main() -> Result<()> {
                         stdout.execute(Print("Mi4"))?;
                     }, 
                     KeyCode::Char('f') => {
-                        let device_guard = device_clone.lock().unwrap();
-                        let config_guard = config_clone.lock().unwrap();
                         let (output_sine, input_playback) = channel();
                         let wave = Wave::new(F4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
@@ -122,8 +116,6 @@ fn main() -> Result<()> {
                         stdout.execute(Print("Fa4"))?;
                     },
                     KeyCode::Char('g') => {
-                        let device_guard = device_clone.lock().unwrap();
-                        let config_guard = config_clone.lock().unwrap();
                         let (output_sine, input_playback) = channel();
                         let wave = Wave::new(G4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
@@ -132,8 +124,6 @@ fn main() -> Result<()> {
                         stdout.execute(Print("Sol4"))?;
                     }, 
                     KeyCode::Char('h') => {
-                        let device_guard = device_clone.lock().unwrap();
-                        let config_guard = config_clone.lock().unwrap();
                         let (output_sine, input_playback) = channel();
                         let wave = Wave::new(A4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
@@ -142,8 +132,6 @@ fn main() -> Result<()> {
                         stdout.execute(Print("La4"))?;
                     },
                     KeyCode::Char('j') => {
-                        let device_guard = device_clone.lock().unwrap();
-                        let config_guard = config_clone.lock().unwrap();
                         let (output_sine, input_playback) = channel();
                         let wave = Wave::new(B4, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
@@ -152,8 +140,6 @@ fn main() -> Result<()> {
                         stdout.execute(Print("Si4"))?;
                     }, 
                     KeyCode::Char('k') => {
-                        let device_guard = device_clone.lock().unwrap();
-                        let config_guard = config_clone.lock().unwrap();
                         let (output_sine, input_playback) = channel();
                         let wave = Wave::new(C5, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
@@ -162,8 +148,6 @@ fn main() -> Result<()> {
                         stdout.execute(Print("Do5"))?;
                     },
                     KeyCode::Char('l') => {
-                        let device_guard = device_clone.lock().unwrap();
-                        let config_guard = config_clone.lock().unwrap();
                         let (output_sine, input_playback) = channel();
                         let wave = Wave::new(D5, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);
@@ -172,8 +156,6 @@ fn main() -> Result<()> {
                         stdout.execute(Print("Re5"))?;
                     },
                     KeyCode::Char(';') => {
-                        let device_guard = device_clone.lock().unwrap();
-                        let config_guard = config_clone.lock().unwrap();
                         let (output_sine, input_playback) = channel();
                         let wave = Wave::new(E5, 1.0, sample_rate as u32, channels as usize, output_sine, buffer_size, wave_type, Some(duration));
                         wave.play(input_playback, buffer_size, &device_guard, &config_guard, duration);

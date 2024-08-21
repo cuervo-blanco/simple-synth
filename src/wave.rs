@@ -101,7 +101,6 @@ impl Wave {
 
                 if let Some(duration) = wave.duration {
                     if time >= duration {
-                        println!("Broke");
                         break;
                     }
                 }
@@ -138,37 +137,37 @@ impl Wave {
         let device = device.clone();
         let config: cpal::StreamConfig = config.clone().into();
 
-        let stream = match sample_format {
-            SampleFormat::F32 => {
-                device.build_output_stream(
-                    &config,
-                    move |data: &mut [f32], _: &cpal::OutputCallbackInfo| {
-                        for sample in data {
-                            *sample = consumer.try_pop().unwrap_or(0.0);
-                        }
-                    },
-                    move |err| {
-                        // react to errors here.
-                        eprintln!("Failed to output samples into stream: {}", err);
-                    },
-                    None //None=blocking, Some(Duration)=timeout
-                )
-            },
-            SampleFormat::I16 => {
-                println!("Not yet implemented(I16)");
-                todo!();
-            },
-            SampleFormat::U16 => {
-                println!("Not yet implemented (U16)");
-                todo!();
-            }
-            sample_format => panic!("Unsupported sample format '{sample_format}'")
-        }.unwrap();
-
-
-        stream.play().expect("Wave::play - Failed to play stream");
-        let duration: f32 = duration * 1000.0;
-        std::thread::sleep(std::time::Duration::from_millis(duration as u64));
+        std::thread::spawn( move || {
+            let stream = match sample_format {
+                SampleFormat::F32 => {
+                    device.build_output_stream(
+                        &config,
+                        move |data: &mut [f32], _: &cpal::OutputCallbackInfo| {
+                            for sample in data {
+                                *sample = consumer.try_pop().unwrap_or(0.0);
+                            }
+                        },
+                        move |err| {
+                            // react to errors here.
+                            eprintln!("Failed to output samples into stream: {}", err);
+                        },
+                        None //None=blocking, Some(Duration)=timeout
+                    )
+                },
+                SampleFormat::I16 => {
+                    println!("Not yet implemented(I16)");
+                    todo!();
+                },
+                SampleFormat::U16 => {
+                    println!("Not yet implemented (U16)");
+                    todo!();
+                }
+                sample_format => panic!("Unsupported sample format '{sample_format}'")
+            }.unwrap();
+            stream.play().expect("Wave::play - Failed to play stream");
+            let duration: f32 = duration * 1000.0;
+            std::thread::sleep(std::time::Duration::from_millis(duration as u64));
+        });
 
     }
 }
